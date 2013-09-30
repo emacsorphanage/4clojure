@@ -1,14 +1,44 @@
 ;;; 4clojure.el --- Open and evaluate 4clojure.com questions
 
-;; Copyright (C) 2013  Joshua Hoff
+;; Copyright (C) 2013 Joshua Hoff
 
-;;; Package-Requires: ((json "1.2") (request "0.2.0"))
+;; Author: Joshua Hoff
+;; Keywords: languages, data
+;; Version: DEV
+;; Package-Requires: ((json "1.2") (request "0.2.0"))
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; To open a specific problem, use `4clojure-open-question':
+;; e.g. "M-x 4clojure-open-question RET 2" opens question 2.
+
+;; To check your answers, use `4clojure-check-answers':
+;; e.g. `M-x 4clojure-check-answers`
+
+;; To open the next question (or the first if you’re not in a 4clojure
+;; buffer), use `4clojure-next-question'. Similarly,
+;; `4clojure-previous-question' opens the previous question.
+
+;;; Code:
 
 (require 'json)
 (require 'request)
 
-; format: (number question-data)
-(setq 4clojure-cached-question nil)
+(defvar 4clojure-cached-question nil
+  "The current question, in the format: (number question-data).")
 
 (defun 4clojure/get-question-cached (problem-number)
   "Gets a 4clojure problem, saves it, returns that if asked again"
@@ -122,11 +152,11 @@ named something like *blah-blah-123*"
   result)
 
 ;;;###autoload
-(defun 4clojure-open-question ()
+(defun 4clojure-open-question (problem-number)
   "Opens a 4clojure problem in an aptly named buffer"
-  (interactive)
-  (setq 4clojure-problem-number (read-string "Which 4clojure question? "))
-  (4clojure/start-new-problem 4clojure-problem-number))
+  (interactive "sWhich 4clojure question? ")
+  (4clojure/start-new-problem problem-number))
+
 
 ;;;###autoload
 (defun 4clojure-next-question ()
@@ -162,4 +192,6 @@ buffer name"
                  (cadr result))
       (message "%s" (cadr result)))))
 
-(provide '4clojure.el)
+
+(provide '4clojure)
+;;; 4clojure.el ends here
