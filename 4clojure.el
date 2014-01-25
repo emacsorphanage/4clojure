@@ -171,6 +171,14 @@ named something like *blah-blah-123*"
   (interactive "sWhich 4clojure question? ")
   (4clojure/start-new-problem problem-number))
 
+;;;###autoload
+(defun 4clojure-login (username)
+  (interactive "sUsername: ")
+  (let ((password (read-passwd "Password: ")))
+    (request
+     "https://www.4clojure.com/login"
+     :type "POST"
+     :data `(("user" . ,username) ("pwd" . ,password)))))
 
 ;;;###autoload
 (defun 4clojure-next-question ()
