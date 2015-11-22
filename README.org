@@ -2,7 +2,7 @@
   Open and evaluate [[http://www.4clojure.com/][4clojure]] questions.
 ** Install
    Use =M-x package-install RET 4clojure= to install. Make sure you have
-   the [[http://melpa.milkbox.net/][MELPA]] package archive enabled in your init.el or .emacs and your package
+   the [[https://melpa.org/][MELPA]] package archive enabled in your init.el or .emacs and your package
    contents are up to date (use =M-x package-refresh-contents= if you can't
    find the 4clojure package and you've added MELPA to your package archives.
 ** Usage
