@@ -49,7 +49,7 @@
        (format "http://www.4clojure.com/api/problem/%s" problem-number)
        :parser 'json-read
        :sync t
-       :success (function*
+       :success (cl-function
                  (lambda (&key data &allow-other-keys)
                    (setq 4clojure-cached-question
                          `(,problem-number ,data)))))
@@ -137,7 +137,7 @@ header, a tip about how to check your answers, etc)"
   "Gets the problem number of the current buffer or 0 if current buffer isn't
 named something like *blah-blah-123*"
   (let* ((bufname (buffer-name (current-buffer)))
-         (number-with-star (first (last (split-string bufname "-"))))
+         (number-with-star (car (last (split-string bufname "-"))))
          (problem-number (substring number-with-star
                                     0
                                     (1- (string-width number-with-star)))))
@@ -153,7 +153,7 @@ named something like *blah-blah-123*"
    :parser 'json-read
    :sync t
    :data `(("id" . ,problem-number) ("code" . ,answer))
-   :success (function*
+   :success (cl-function
              (lambda (&key data &allow-other-keys)
                (let ((error (assoc-default 'error data))
                      (message (assoc-default 'message data))
