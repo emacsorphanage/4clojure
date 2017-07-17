@@ -36,6 +36,7 @@
 
 (require 'json)
 (require 'request)
+(require 'cl)
 
 (defvar 4clojure-cached-question nil
   "The current question, in the format: (number question-data).")
@@ -66,7 +67,8 @@
   "Gets the first question of a 4clojure problem (sometimes there only is one),
 these are called 'tests' on the site"
   (replace-regexp-in-string
-   "" ""
+   "
+" ""
    (elt (assoc-default 'tests
                        (4clojure/get-question-cached problem-number))
         0)))
@@ -114,7 +116,8 @@ header, a tip about how to check your answers, etc)"
              (mapconcat 'identity restrictions ", ")
              "\n"))
    ";;\n;; Use M-x 4clojure-check-answers when you're done!\n\n"
-   (replace-regexp-in-string "" "" questions)))
+   (replace-regexp-in-string "
+" "" questions)))
 
 (defun 4clojure/get-answer-from-current-buffer (problem-number)
   "Gets the user's answer to the first question by getting the original question
