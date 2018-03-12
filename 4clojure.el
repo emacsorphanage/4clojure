@@ -100,7 +100,8 @@ clobber existing text in the buffer (if the problem was already opened)."
       (search-forward "__")
       (backward-char 2)
       (when (functionp 'clojure-mode)
-        (clojure-mode)))))
+        (clojure-mode)
+        (4clojure-mode)))))
 
 (defun 4clojure/format-problem-for-buffer (problem-number description questions &optional restrictions)
   "Formats a 4clojure question and description for an emacs buffer (adds a
@@ -204,6 +205,25 @@ buffer name"
                  (car result)
                  (cadr result))
       (message "%s" (cadr result)))))
+
+;;;###autoload
+(defvar 4clojure-mode-map
+  (let ((map (make-sparse-keymap)))
+    (let ((prefix-map (make-sparse-keymap)))
+      (define-key prefix-map (kbd "c") '4clojure-check-answers)
+      (define-key prefix-map (kbd "n") '4clojure-next-question)
+      (define-key map "C-c" prefix-map))
+    map)
+  "Keymap for 4clojure mode.")
+
+;;;###autoload
+(define-minor-mode 4clojure-mode
+  "4clojure Minor Mode.
+  \\{4clojure-mode-map}"
+  :lighter " 4clj"
+  :keymap  '4clojure-mode-map
+  :group   '4clojure
+  :require '4clojure)
 
 (provide '4clojure)
 ;;; 4clojure.el ends here
