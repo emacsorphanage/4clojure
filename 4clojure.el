@@ -176,9 +176,15 @@ named something like *blah-blah-123*"
   (interactive "sUsername: ")
   (let ((password (read-passwd "Password: ")))
     (request
-     "https://www.4clojure.com/login"
+     "http://www.4clojure.com/login"
      :type "POST"
-     :data `(("user" . ,username) ("pwd" . ,password)))))
+     :data `(("user" . ,username) ("pwd" . ,password))
+     ;; When user login successful, 4clojure will redirect user to main page,
+     ;; If `request-backend` is `curl`, we will get response code 400 (4 clojure's behavior) or 500 (see http://curl.haxx.se/mail/tracker-2012-01/0018.html
+     ;; If `request-backend` is `url-retrieve`, we will get response 302 (it does not process redirection
+     :status-code '((404 . (lambda (&rest _) (message "login successful!")))
+                    (302 . (lambda (&rest _) (message "login successful")))
+                    (500 . (lambda (&rest _) (message "login successful")))))))
 
 ;;;###autoload
 (defun 4clojure-next-question ()
