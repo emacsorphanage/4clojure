@@ -144,7 +144,7 @@ named something like *blah-blah-123*"
                                     (1- (string-width number-with-star)))))
     (if (string-match "[^0-9]" problem-number)
         0
-      (string-to-int problem-number))))
+      (string-to-number problem-number))))
 
 (defun 4clojure/check-answer (problem-number answer)
   "Sends an answer to 4clojure and returns the result"
