@@ -96,7 +96,7 @@ clobber existing text in the buffer (if the problem was already opened)."
     ; only add to empty buffers, thanks: http://stackoverflow.com/q/18312897
     (when (= 0 (buffer-size buffer))
       (insert (4clojure/format-problem-for-buffer problem-number description questions restrictions))
-      (beginning-of-buffer)
+      (goto-char (point-min))
       (search-forward "__")
       (backward-char 2)
       (when (functionp 'clojure-mode)
