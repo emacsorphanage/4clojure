@@ -5,7 +5,7 @@
 ;; Author: Joshua Hoff
 ;; Maintainer: Sasha Kovar <sasha-git@arcocene.org>
 ;; Keywords: languages, data
-;; Version: 0.1.1
+;; Version: 0.2.1
 ;; Package-Requires: ((request "0.2.0"))
 ;; Homepage: https://github.com/abend/4clojure.el
 
