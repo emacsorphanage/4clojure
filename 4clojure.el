@@ -60,7 +60,7 @@
 
 (defun 4clojure-questions-for-problem (problem-number)
   "Get a list of questions for PROBLEM-NUMBER."
-  (mapconcat 'identity
+  (mapconcat #'identity
              (assoc-default 'tests
                             (4clojure-get-question-cached problem-number))
              "\n\n"))
@@ -101,7 +101,7 @@ Don't clobber existing text in the buffer if the problem was already opened."
       (goto-char (point-min))
       (search-forward "__")
       (backward-char 2)
-      (when (functionp 'clojure-mode)
+      (when (functionp #'clojure-mode)
         (clojure-mode)
         (4clojure-mode)))))
 
@@ -115,7 +115,7 @@ it adds a header and tip about how to check your answers."
    ";; " (replace-regexp-in-string "\s*\n+\s*" "\n;;\n;; " description) "\n"
    (when restrictions
      (concat ";;\n;; Restrictions (please don't use these function(s)): "
-             (mapconcat 'identity restrictions ", ")
+             (mapconcat #'identity restrictions ", ")
              "\n"))
    ";;\n;; Use M-x 4clojure-check-answers when you're done!\n\n"
    (replace-regexp-in-string "" "" questions)))
