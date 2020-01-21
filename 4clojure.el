@@ -3,9 +3,11 @@
 ;; Copyright (C) 2013 Joshua Hoff
 
 ;; Author: Joshua Hoff
+;; Maintainer: Sasha Kovar <sasha-git@arcocene.org>
 ;; Keywords: languages, data
 ;; Version: 0.1.1
 ;; Package-Requires: ((request "0.2.0"))
+;; Homepage: https://github.com/abend/4clojure.el
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
