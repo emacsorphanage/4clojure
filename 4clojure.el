@@ -1,4 +1,4 @@
-;;; 4clojure.el --- Open and evaluate 4clojure.com questions
+;;; 4clojure.el --- Open and evaluate 4clojure.com questions.  -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2013 Joshua Hoff
 
