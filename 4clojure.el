@@ -38,6 +38,7 @@
 
 (require 'json)
 (require 'request)
+(require 'cl-lib)
 
 (defvar 4clojure-cached-question nil
   "The current question, in the format: (number question-data).")
@@ -51,7 +52,7 @@
        (format "http://www.4clojure.com/api/problem/%s" problem-number)
        :parser 'json-read
        :sync t
-       :success (function*
+       :success (cl-function
                  (lambda (&key data &allow-other-keys)
                    (setq 4clojure-cached-question
                          `(,problem-number ,data)))))
@@ -154,7 +155,7 @@ Compares the original question (with a blank in it) to the current buffer."
    :parser 'json-read
    :sync t
    :data `(("id" . ,problem-number) ("code" . ,answer))
-   :success (function*
+   :success (cl-function
              (lambda (&key data &allow-other-keys)
                (let ((error (assoc-default 'error data))
                      (message (assoc-default 'message data))
