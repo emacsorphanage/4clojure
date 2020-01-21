@@ -5,7 +5,7 @@
 ;; Author: Joshua Hoff
 ;; Keywords: languages, data
 ;; Version: 0.1.1
-;; Package-Requires: ((json "1.2") (request "0.2.0"))
+;; Package-Requires: ((request "0.2.0"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
