@@ -95,7 +95,7 @@ Don't clobber existing text in the buffer if the problem was already opened."
         (description (4clojure-description-of-problem problem-number))
         (restrictions (4clojure-restrictions-for-problem problem-number)))
     (switch-to-buffer buffer)
-    ; only add to empty buffers, thanks: http://stackoverflow.com/q/18312897
+    ;; only add to empty buffers, thanks: http://stackoverflow.com/q/18312897
     (when (= 0 (buffer-size buffer))
       (insert (4clojure-format-problem-for-buffer problem-number description questions restrictions))
       (goto-char (point-min))
