@@ -1,6 +1,6 @@
 ;;; 4clojure.el --- Open and evaluate 4clojure.com questions.  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2013 Joshua Hoff
+;; Copyright (C) 2013-2020 Joshua Hoff
 
 ;; Author: Joshua Hoff
 ;; Maintainer: Sasha Kovar <sasha-git@arcocene.org>
