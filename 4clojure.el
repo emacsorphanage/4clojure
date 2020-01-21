@@ -29,7 +29,7 @@
 ;; e.g. `M-x 4clojure-check-answers`
 
 ;; To open the next question (or the first if you’re not in a 4clojure
-;; buffer), use `4clojure-next-question'. Similarly,
+;; buffer), use `4clojure-next-question'.  Similarly,
 ;; `4clojure-previous-question' opens the previous question.
 
 ;;; Code:
@@ -41,7 +41,7 @@
   "The current question, in the format: (number question-data).")
 
 (defun 4clojure/get-question-cached (problem-number)
-  "Gets a 4clojure problem, saves it, returns that if asked again"
+  "Get (and memoize) the problem PROBLEM-NUMBER."
   (if (string= (car 4clojure-cached-question) problem-number)
       (cadr 4clojure-cached-question)
     (progn
@@ -56,15 +56,15 @@
       (cadr 4clojure-cached-question))))
 
 (defun 4clojure/questions-for-problem (problem-number)
-  "Gets a list of questions/tests corresponding to a 4clojure problem"
+  "Get a list of questions for PROBLEM-NUMBER."
   (mapconcat 'identity
              (assoc-default 'tests
                             (4clojure/get-question-cached problem-number))
              "\n\n"))
 
 (defun 4clojure/first-question-for-problem (problem-number)
-  "Gets the first question of a 4clojure problem (sometimes there only is one),
-these are called 'tests' on the site"
+  "Get the first question of the problem PROBLEM-NUMBER.
+These are called 'tests' on the site."
   (replace-regexp-in-string
    "" ""
    (elt (assoc-default 'tests
@@ -72,13 +72,12 @@ these are called 'tests' on the site"
         0)))
 
 (defun 4clojure/description-of-problem (problem-number)
-  "Gets the description of a 4clojure problem"
+  "Get the description of problem PROBLEM-NUMBER."
   (assoc-default 'description
                  (4clojure/get-question-cached problem-number)))
 
 (defun 4clojure/restrictions-for-problem (problem-number)
-  "Gets any restrictions for a problem (a list of functions you're not allowed
-to use); or nil if there are no restrictions"
+  "Get a list of restrictions (forbidden functions) for PROBLEM-NUMBER."
   (let ((restrictions (assoc-default 'restricted
                         (4clojure/get-question-cached problem-number))))
     (if (= 0 (length restrictions))
@@ -86,8 +85,8 @@ to use); or nil if there are no restrictions"
       restrictions)))
 
 (defun 4clojure/start-new-problem (problem-number)
-  "Opens a new buffer with a 4clojure problem and description in it. Doesn't
-clobber existing text in the buffer (if the problem was already opened)."
+  "Open a new buffer for PROBLEM-NUMBER with the question and description.
+Don't clobber existing text in the buffer if the problem was already opened."
   (let ((buffer (get-buffer-create (format "*4clojure-problem-%s*" problem-number)))
         (questions (4clojure/questions-for-problem problem-number))
         (description (4clojure/description-of-problem problem-number))
@@ -104,8 +103,9 @@ clobber existing text in the buffer (if the problem was already opened)."
         (4clojure-mode)))))
 
 (defun 4clojure/format-problem-for-buffer (problem-number description questions &optional restrictions)
-  "Formats a 4clojure question and description for an emacs buffer (adds a
-header, a tip about how to check your answers, etc)"
+  "Format problem PROBLEM-NUMBER for an Emacs buffer.
+In addition to displaying the DESCRIPTION, QUESTIONS and RESTRICTIONS,
+it adds a header and tip about how to check your answers."
   (concat
    ";; 4Clojure Question " problem-number "\n"
    ";;\n"
@@ -118,9 +118,8 @@ header, a tip about how to check your answers, etc)"
    (replace-regexp-in-string "" "" questions)))
 
 (defun 4clojure/get-answer-from-current-buffer (problem-number)
-  "Gets the user's answer to the first question by getting the original question
- (with a blank in it) from 4clojure and matching that against the current
- buffer"
+  "Get the user's answer to the first question in PROBLEM-NUMBER.
+Compares the original question (with a blank in it) to the current buffer."
   (string-match
    (replace-regexp-in-string
     "__"
@@ -135,8 +134,7 @@ header, a tip about how to check your answers, etc)"
   (match-string 1 (buffer-string)))
 
 (defun 4clojure/problem-number-of-current-buffer ()
-  "Gets the problem number of the current buffer or 0 if current buffer isn't
-named something like *blah-blah-123*"
+  "Get the problem number for the current buffer or 0."
   (let* ((bufname (buffer-name (current-buffer)))
          (number-with-star (first (last (split-string bufname "-"))))
          (problem-number (substring number-with-star
@@ -147,7 +145,7 @@ named something like *blah-blah-123*"
       (string-to-number problem-number))))
 
 (defun 4clojure/check-answer (problem-number answer)
-  "Sends an answer to 4clojure and returns the result"
+  "Send an ANSWER to PROBLEM-NUMBER to 4clojure and return the result."
   (request
    (format "http://www.4clojure.com/rest/problem/%s" problem-number)
    :type "POST"
@@ -167,12 +165,14 @@ named something like *blah-blah-123*"
 
 ;;;###autoload
 (defun 4clojure-open-question (problem-number)
-  "Opens a 4clojure problem in an aptly named buffer"
+  "Open problem PROBLEM-NUMBER in an aptly named buffer."
   (interactive "sWhich 4clojure question? ")
   (4clojure/start-new-problem problem-number))
 
 ;;;###autoload
 (defun 4clojure-login (username)
+  "Log in to the 4clojure website with the supplied USERNAME.
+Prompts for a password."
   (interactive "sUsername: ")
   (let ((password (read-passwd "Password: ")))
     (request
@@ -180,16 +180,17 @@ named something like *blah-blah-123*"
      :type "POST"
      :data `(("user" . ,username) ("pwd" . ,password))
      ;; When user login successful, 4clojure will redirect user to main page,
-     ;; If `request-backend` is `curl`, we will get response code 400 (4 clojure's behavior) or 500 (see http://curl.haxx.se/mail/tracker-2012-01/0018.html
-     ;; If `request-backend` is `url-retrieve`, we will get response 302 (it does not process redirection
+     ;; If `request-backend` is `curl`, we will get response code 400 (4 clojure's behavior)
+     ;; or 500 (see http://curl.haxx.se/mail/tracker-2012-01/0018.html
+     ;; If `request-backend` is `url-retrieve`, we will get response 302
+     ;; (it does not process redirection)
      :status-code '((404 . (lambda (&rest _) (message "login successful!")))
                     (302 . (lambda (&rest _) (message "login successful")))
                     (500 . (lambda (&rest _) (message "login successful")))))))
 
 ;;;###autoload
 (defun 4clojure-next-question ()
-  "Gets the next 4clojure question or 1st question based on the current buffer
-name"
+  "Get the next question or 1st question based on the current buffer name."
   (interactive)
   (let ((problem-number (4clojure/problem-number-of-current-buffer)))
     (4clojure/start-new-problem (int-to-string (1+ problem-number)))))
@@ -197,8 +198,7 @@ name"
 
 ;;;###autoload
 (defun 4clojure-previous-question ()
-  "Opens the previous 4clojure question or 1st question based on the current
-buffer name"
+  "Open the previous question or 1st question based on the current buffer name."
   (interactive)
   (let ((problem-number (4clojure/problem-number-of-current-buffer)))
     (4clojure/start-new-problem (int-to-string (if (< problem-number 3)
@@ -207,7 +207,7 @@ buffer name"
 
 ;;;###autoload
 (defun 4clojure-check-answers ()
-  "Sends the first answer to 4clojure and gets a message back"
+  "Send the first answer to 4clojure and check the result."
   (interactive)
   (let* ((problem-number-as-int (4clojure/problem-number-of-current-buffer))
          (problem-number (int-to-string problem-number-as-int))
