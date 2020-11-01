@@ -148,7 +148,7 @@ Compares the original question (with a blank in it) to the current buffer."
       (string-to-number problem-number))))
 
 (defun 4clojure-check-answer (problem-number answer)
-  "Send an ANSWER to PROBLEM-NUMBER to 4clojure and return the result."
+  "PROBLEM-NUMBER receives an ANSWER and is sent to 4clojure and return the result."
   (request
    (format "http://www.4clojure.com/rest/problem/%s" problem-number)
    :type "POST"
