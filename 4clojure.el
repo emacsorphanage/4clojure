@@ -49,7 +49,7 @@
       (cadr 4clojure-cached-question)
     (progn
       (request
-       (format "http://www.4clojure.com/api/problem/%s" problem-number)
+       (format "https://www.4clojure.com/api/problem/%s" problem-number)
        :parser 'json-read
        :sync t
        :success (cl-function
@@ -150,7 +150,7 @@ Compares the original question (with a blank in it) to the current buffer."
 (defun 4clojure-check-answer (problem-number answer)
   "Send an ANSWER to PROBLEM-NUMBER to 4clojure and return the result."
   (request
-   (format "http://www.4clojure.com/rest/problem/%s" problem-number)
+   (format "https://www.4clojure.com/rest/problem/%s" problem-number)
    :type "POST"
    :parser 'json-read
    :sync t
@@ -179,7 +179,7 @@ Prompts for a password."
   (interactive "sUsername: ")
   (let ((password (read-passwd "Password: ")))
     (request
-     "http://www.4clojure.com/login"
+     "https://www.4clojure.com/login"
      :type "POST"
      :data `(("user" . ,username) ("pwd" . ,password))
      ;; When user login successful, 4clojure will redirect user to main page,
