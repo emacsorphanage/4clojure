@@ -74,6 +74,11 @@ These are called 'tests' on the site."
                        (4clojure-get-question-cached problem-number))
         0)))
 
+(defun 4clojure-title-of-problem (problem-number)
+  "Gets the title of problem PROBLEM-NUMBER."
+  (assoc-default 'title
+                 (4clojure-get-question-cached problem-number)))
+
 (defun 4clojure-description-of-problem (problem-number)
   "Get the description of problem PROBLEM-NUMBER."
   (assoc-default 'description
@@ -91,13 +96,14 @@ These are called 'tests' on the site."
   "Open a new buffer for PROBLEM-NUMBER with the question and description.
 Don't clobber existing text in the buffer if the problem was already opened."
   (let ((buffer (get-buffer-create (format "*4clojure-problem-%s*" problem-number)))
-        (questions (4clojure-questions-for-problem problem-number))
-        (description (4clojure-description-of-problem problem-number))
+        (questions    (4clojure-questions-for-problem problem-number))
+        (title        (4clojure-title-of-problem problem-number))
+        (description  (4clojure-description-of-problem problem-number))
         (restrictions (4clojure-restrictions-for-problem problem-number)))
     (switch-to-buffer buffer)
     ;; only add to empty buffers, thanks: https://stackoverflow.com/q/18312897
     (when (= 0 (buffer-size buffer))
-      (insert (4clojure-format-problem-for-buffer problem-number description questions restrictions))
+      (insert (4clojure-format-problem-for-buffer problem-number title description questions restrictions))
       (goto-char (point-min))
       (search-forward "__")
       (backward-char 2)
@@ -105,12 +111,12 @@ Don't clobber existing text in the buffer if the problem was already opened."
         (clojure-mode)
         (4clojure-mode)))))
 
-(defun 4clojure-format-problem-for-buffer (problem-number description questions &optional restrictions)
+(defun 4clojure-format-problem-for-buffer (problem-number title description questions &optional restrictions)
   "Format problem PROBLEM-NUMBER for an Emacs buffer.
-In addition to displaying the DESCRIPTION, QUESTIONS and RESTRICTIONS,
+In addition to displaying the TITLE, DESCRIPTION, QUESTIONS and RESTRICTIONS,
 it adds a header and tip about how to check your answers."
   (concat
-   ";; 4Clojure Question " problem-number "\n"
+   ";; 4Clojure Question " problem-number " - " title "\n"
    ";;\n"
    ";; " (replace-regexp-in-string "\s*\n+\s*" "\n;;\n;; " description) "\n"
    (when restrictions
